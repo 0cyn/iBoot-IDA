@@ -16,5 +16,5 @@ def load_file(fd, neflags, format):
     ver_str = ver_bin.decode()
     ver_str = "%s" % (ver_str)
     if ver_str[:9] == "SecureROM":
-        loader = SecureROMLoader(fd, bitness)
+        loader = SecureROMLoader(fd, bitness, ver_str)
         loader.load()
