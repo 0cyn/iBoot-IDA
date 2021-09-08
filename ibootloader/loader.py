@@ -1,8 +1,10 @@
 
-from .ida import Bitness
+from disassembler_api.api import Bitness, DisassemblerType
+from disassembler_api.ida import IDAAPI
+
 from .securerom import SecureROMLoader
 
-def load_file(fd, neflags, format):
+def load_file(da_type, fd, neflags, format):
 
     print("[x] iBootLoader for IDA 7.5+ by kat")
     print("[x] initializing")
@@ -16,5 +18,6 @@ def load_file(fd, neflags, format):
     ver_str = ver_bin.decode()
     ver_str = "%s" % (ver_str)
     if ver_str[:9] == "SecureROM":
-        loader = SecureROMLoader(fd, bitness, ver_str)
-        loader.load()
+        if da_type == DisassemblerType.IDA:
+            loader = SecureROMLoader(IDAAPI, fd, bitness, ver_str)
+            loader.load()

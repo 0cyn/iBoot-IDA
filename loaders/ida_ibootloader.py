@@ -1,5 +1,6 @@
 
 from ibootloader import loader
+from disassembler_api.api import DisassemblerType
 import sys
 
 DEBUG_WITHIN_IDA = 0
@@ -85,7 +86,7 @@ def accept_file(fd, fname):
 
 
 def load_file(fd, neflags, format):
-    loader.load_file(fd, neflags, format)
+    loader.load_file(DisassemblerType.IDA, fd, neflags, format)
 
     return 1
 
