@@ -1,5 +1,7 @@
 # ibootloader
 
+this project was heavily inspired by https://github.com/argp/iBoot64helper
+
 WIP Loader for Apple's SecureROM/iBoot
 
 ### Disassembler Support:
