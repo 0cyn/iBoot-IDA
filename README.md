@@ -12,7 +12,11 @@ Copy dissassembler_api/, ibootloader/, and the file in loaders/ to $IDA_INSTALL_
 
 32 bit SecureROMs
 
+32 bit iBoot
+
 # TODO
 
-iBoot, SEPROM?
+64 bit iBoot 
+
+SEPROM stuff maybe
 
