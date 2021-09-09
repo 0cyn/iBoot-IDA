@@ -123,6 +123,25 @@ class API(ABC):
 
     @staticmethod
     @abstractmethod
+    def get_disasm(location):
+        """
+
+        :param location:
+        :return:
+        """
+
+    @staticmethod
+    @abstractmethod
+    def rebase_to(delta):
+        """
+
+        :param delta:
+        :return:
+        """
+
+
+    @staticmethod
+    @abstractmethod
     def xrefs_to(function_ea):
         """
 

@@ -21,12 +21,24 @@ class IBootLoader:
         print("[*] Defining entry point")
         self.api.add_entry_point(self.code_segment.start, "start")
 
+        print("[*] Looking for rebase address")
+        rebase_addr = self.find_and_rebase()
+
         print("[*] Analyzing loaded code")
-        self.api.analyze(self.code_segment.start, self.code_segment.end)
+        self.api.analyze(rebase_addr, rebase_addr + self.code_segment.size)
+
+    def find_and_rebase(self):
+        rebase_ldr_addr = 0x44
+        self.api.analyze(0x0, 0x100)
+        rebase_addr = int(self.api.get_disasm(rebase_ldr_addr).split('=')[1], 16)
+
+        print(f'  [+] {rebase_addr}')
+        self.api.rebase_to(rebase_addr)
+        return rebase_addr
 
     def configure_segments(self):
 
-        base_addr = 0x48818000
+        base_addr = 0x0
         ptr_size = 0x8
         sram_len = 0x00120000
 
@@ -36,7 +48,6 @@ class IBootLoader:
 
         elif self.bitness == Bitness.Bitness64:
             self.api.set_processor_type(ProcessorType.ARM64)
-            base_addr = 0x100000000
 
         sram_start_ptr = 0x300 + (7*ptr_size)
 

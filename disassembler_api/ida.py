@@ -95,6 +95,14 @@ class IDAAPI(API):
         ida_entry.add_entry(0, location, name, code, flags)
 
     @staticmethod
+    def get_disasm(location):
+        return idc.GetDisasm(location)
+
+    @staticmethod
+    def rebase_to(delta):
+        ida_segment.rebase_program(delta, ida_segment.MSF_FIXONCE)
+
+    @staticmethod
     def add_name(location, name, flags=0):
         ida_name.set_name(location, name, flags)
 
