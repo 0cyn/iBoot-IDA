@@ -3,6 +3,7 @@ from disassembler_api.api import Bitness, DisassemblerType
 from disassembler_api.ida import IDAAPI
 
 from .securerom import SecureROMLoader
+from .iboot import IBootLoader
 
 def load_file(da_type, fd, neflags, format):
 
@@ -20,4 +21,10 @@ def load_file(da_type, fd, neflags, format):
     if ver_str[:9] == "SecureROM":
         if da_type == DisassemblerType.IDA:
             loader = SecureROMLoader(IDAAPI, fd, bitness, ver_str)
+            loader.load()
+
+
+    if ver_str[:5] == "iBoot":
+        if da_type == DisassemblerType.IDA:
+            loader = IBootLoader(IDAAPI, fd, bitness, ver_str)
             loader.load()
