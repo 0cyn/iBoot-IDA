@@ -70,18 +70,9 @@ class DisassemblerFile(ABC):
 
 class API(ABC):
 
-
     @staticmethod
     @abstractmethod
-    def bad_address():
-        """
-
-        :return: Bad Address
-        """
-
-    @staticmethod
-    @abstractmethod
-    def get_function(location):
+    def api_name() -> str:
         """
 
         :return:
@@ -89,8 +80,24 @@ class API(ABC):
 
     @staticmethod
     @abstractmethod
-    def get_disasm_file(fd):
+    def bad_address() -> int:
+        """Returns the BAD_ADDRESS value for the disassembler
+
+        :return: Bad Address
         """
+
+    @staticmethod
+    @abstractmethod
+    def get_function(location: int) -> int:
+        """Get the address of the function start `location` is located in.
+
+        :return: Function start
+        """
+
+    @staticmethod
+    @abstractmethod
+    def get_disasm_file(fd) -> DisassemblerFile:
+        """Generates a Disassembler Subclassed file for the respective disassembler from a file-like object.
 
         :param fd:
         :return:
@@ -99,15 +106,15 @@ class API(ABC):
     @staticmethod
     @abstractmethod
     def set_processor_type(type: ProcessorType) -> None:
-        """
+        """Set the processor type for the file
 
         :param type: Processor Type
         """
 
     @staticmethod
     @abstractmethod
-    def create_segment(segment: Segment):
-        """
+    def create_segment(segment: Segment) -> None:
+        """Create a segment
 
         :param segment: segment to add
         :return:
@@ -115,16 +122,16 @@ class API(ABC):
 
     @staticmethod
     @abstractmethod
-    def function_addresses():
-        """
+    def function_addresses() -> list:
+        """List of function addresses in the program
 
         :return:
         """
 
     @staticmethod
     @abstractmethod
-    def get_disasm(location):
-        """
+    def get_disasm(location: int) -> str:
+        """Get a string containing disassembly at the requested address
 
         :param location:
         :return:
@@ -132,36 +139,36 @@ class API(ABC):
 
     @staticmethod
     @abstractmethod
-    def rebase_to(delta):
-        """
+    def rebase_to(delta: int) -> None:
+        """Rebase the entire program by delta bytes
 
         :param delta:
         :return:
         """
 
-
     @staticmethod
     @abstractmethod
-    def xrefs_to(function_ea):
-        """
+    def xrefs_to(function_ea: int) -> list:
+        """List of cross-references to function_ea
 
         :return:
         """
 
     @staticmethod
     @abstractmethod
-    def get_function_name(location):
-        """
+    def get_function_name(location: int) -> None:
+        """Get the name (if it exists) of the function at location
 
         :return:
         """
 
     @staticmethod
     @abstractmethod
-    def copy_da_file_to_segment(file: DisassemblerFile, segment, file_location):
+    def copy_da_file_to_segment(file: DisassemblerFile, segment: Segment, file_location: int) -> None:
         """
         Copy a Disassembler File's bytes into a segment; Load it
 
+        :param file_location:
         :param file:
         :param segment:
         :return:
@@ -170,7 +177,7 @@ class API(ABC):
     @staticmethod
     @abstractmethod
     def add_struct(struct: Struct) -> None:
-        """
+        """Add a struct to the table
 
         :param struct: Struct to add
         """
@@ -198,18 +205,20 @@ class API(ABC):
 
     @staticmethod
     @abstractmethod
-    def search_binary(binary, start, end, direction):
-        """
+    def search_binary(binary: str, start: int, end: int, direction: SearchDirection) -> int:
+        """Perform a binary search
 
         :param binary:
         :param start:
-        :return:
+        :param end:
+        :param direction:
+        :return: Location
         """
 
     @staticmethod
     @abstractmethod
-    def search_text(text, start, end, direction):
-        """
+    def search_text(text: str, start: int, end: int, direction: SearchDirection) -> int:
+        """Perform a text search
 
         :param text:
         :param start:

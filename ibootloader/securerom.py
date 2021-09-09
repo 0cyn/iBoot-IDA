@@ -6,6 +6,7 @@ from .maps import symbols
 
 class SecureROMLoader:
     def __init__(self, api: API, fd, bitness, version_string):
+        self.name = "SecureROM Loader"
         self.api: API = api
         self.file: DisassemblerFile = self.api.get_disasm_file(fd)
         self.bitness = bitness

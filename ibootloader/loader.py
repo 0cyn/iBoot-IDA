@@ -7,8 +7,11 @@ from .iboot import IBootLoader
 
 def load_file(da_type, fd, neflags, format):
 
-    print("[x] iBootLoader for IDA 7.5+ by kat")
+    print("[x] iBootLoader by kat")
     print("[x] initializing")
+    if da_type == DisassemblerType.IDA:
+        api = IDAAPI
+    print(f'[+] Loaded disassembler module \'{api.api_name()}\'')
 
     fd.seek(0x0)
     bn = fd.read(0x4)
@@ -20,11 +23,12 @@ def load_file(da_type, fd, neflags, format):
     ver_str = "%s" % (ver_str)
     if ver_str[:9] == "SecureROM":
         if da_type == DisassemblerType.IDA:
-            loader = SecureROMLoader(IDAAPI, fd, bitness, ver_str)
-            loader.load()
-
+            loader = SecureROMLoader(api, fd, bitness, ver_str)
 
     if ver_str[:5] == "iBoot":
         if da_type == DisassemblerType.IDA:
-            loader = IBootLoader(IDAAPI, fd, bitness, ver_str)
-            loader.load()
+            loader = IBootLoader(api, fd, bitness, ver_str)
+
+    print(f'[+] Using loader module \'{loader.name}\'')
+
+    loader.load()

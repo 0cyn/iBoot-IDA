@@ -22,8 +22,12 @@ import idc
 class IDAAPI(API):
 
     @staticmethod
+    def api_name() -> str:
+        return "IDA Pro 7.5"
+
+    @staticmethod
     def get_function(location):
-        idaapi.get_func(location)
+        return idaapi.get_func(location)
 
     @staticmethod
     def bad_address():
@@ -74,11 +78,11 @@ class IDAAPI(API):
 
     @staticmethod
     def function_addresses():
-        return idautils.Functions()
+        return [i for i in idautils.Functions()]
 
     @staticmethod
     def xrefs_to(function_ea):
-        return idautils.CodeRefsTo(function_ea, 0)
+        return idautils.XrefsTo(function_ea, 0)
 
     @staticmethod
     def get_function_name(location):
