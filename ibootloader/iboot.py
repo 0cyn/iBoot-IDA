@@ -54,6 +54,8 @@ class IBootLoader:
 
     def find_and_rebase(self):
         rebase_ldr_addr = 0x44
+        if self.bitness == Bitness.Bitness64:
+            rebase_ldr_addr = 0x8
         self.api.analyze(0x0, 0x100)
         rebase_addr = int(self.api.get_disasm(rebase_ldr_addr).split('=')[1], 16)
 

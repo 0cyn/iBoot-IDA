@@ -1,22 +1,19 @@
 # ibootloader
 
-WIP IDA Pro Loader for Apple's SecureROM/iBoot
+WIP Loader for Apple's SecureROM/iBoot
 
-Installation:
+### Disassembler Support:
 
-Copy dissassembler_api/, ibootloader/, and the file in loaders/ to $IDA_INSTALL_DIRECTORY/loaders
+| Disassembler | Supported |
+|--------------|-----------|
+| IDA 7.0-7.5  | ✓         |
+| Ghidra       | ✗         |
+| Hopper       | ✗         |
 
-# Functional
+# Filetype Support 
 
-64 Bit SecureROMs
-
-32 bit SecureROMs
-
-32 bit iBoot
-
-# TODO
-
-64 bit iBoot 
-
-SEPROM stuff maybe
-
+| File type                | Supported |
+|--------------------------|-----------|
+| arm32/64 SecureROM       | ✓         |
+| arm32/64 iBoot/iBEC/iBSS | ✓         |
+| SEPROM                   | ✗        |
