@@ -86,7 +86,11 @@ class IDAAPI(API):
 
     @staticmethod
     def get_function_name(location):
-        return idc.get_func_name(location)
+        try:
+            name = idc.get_func_name(location)
+            return name
+        except:
+            return ""
 
     @staticmethod
     def add_struct(struct):

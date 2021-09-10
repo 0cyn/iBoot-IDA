@@ -57,7 +57,7 @@ class SecureROMLoader:
             # For each of the incoming references
             for ref_ea in self.api.xrefs_to(function_ea):
                 # Get the name of the referring function
-                caller_name = self.api.get_function_name(ref_ea)
+                caller_name = self.api.get_function_name(ref_ea.frm)
                 if caller_name == 'start':
                     print(f'  [+] _platform_start = {hex(function_ea)}')
                     self.api.add_name(function_ea, "_platform_start")
@@ -120,7 +120,10 @@ class SecureROMLoader:
             function_address = self.api.get_function(pk_ea)
 
         for xref in self.api.xrefs_to(pk_ea):
-            func = self.api.get_function(xref.frm)
+            try:
+                func = self.api.get_function(xref.frm)
+            except:
+                continue
             if not func:
                 continue
             function_address = func.start_ea
