@@ -6,7 +6,7 @@ WIP Loader for Apple's SecureROM/iBoot
 
 this project was heavily inspired by https://github.com/argp/iBoot64helper
 
-### why does this exist and why aren't you using <x> project instead?
+### why does this exist and why aren't you using [insert other project] instead?
   
 None of the other projects properly support 32 bit, several are broken, and the code here is (only slightly) cleaner.
 
