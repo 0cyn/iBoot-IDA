@@ -105,6 +105,15 @@ class API(ABC):
 
     @staticmethod
     @abstractmethod
+    def disasm_file_from_fp(fp):
+        """eh
+
+        :param fd:
+        :return:
+        """
+
+    @staticmethod
+    @abstractmethod
     def set_processor_type(type: ProcessorType) -> None:
         """Set the processor type for the file
 
@@ -235,6 +244,16 @@ class API(ABC):
 
         :param text: Question
         :return: Boolean indicating yes(True) or no(False)
+        """
+
+    @staticmethod
+    @abstractmethod
+    def ask_str(text) -> str:
+        """
+        Ask the user for string input
+
+        :param text: Question
+        :return: str input
         """
 
     @staticmethod

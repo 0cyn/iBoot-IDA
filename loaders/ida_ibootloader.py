@@ -22,6 +22,20 @@ def accept_file(fd, fname):
 
     if type(fname) == str:
         fd.seek(0x0)
+
+        # check if im4p
+        IM4P_MAGIC = b'\x4D\x34\x50\x16'
+        fd.seek(0x8)
+        mag = fd.read(0x4)
+        if mag == IM4P_MAGIC:
+            ret = {
+                "format": f'iBootLoader: iBoot (Encrypted)',
+                "processor": "arm"
+            }
+            return ret
+
+        fd.seek(0x0)
+
         bn = fd.read(0x4)
         fd.seek(0x200)
         ver_bin = fd.read(0x30)

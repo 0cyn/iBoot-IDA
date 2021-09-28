@@ -48,6 +48,10 @@ class IDAAPI(API):
         return IDAFile(fd)
 
     @staticmethod
+    def disasm_file_from_fp(fp):
+        return idaapi.loader_input_t.from_fp(fp)
+
+    @staticmethod
     def create_segment(segment: Segment):
 
         segm = idaapi.segment_t()
@@ -117,6 +121,10 @@ class IDAAPI(API):
     @staticmethod
     def ask(text):
         return ida_kernwin.ask_yn(0, text) == 1
+
+    @staticmethod
+    def ask_str(text):
+        return ida_kernwin.ask_str("", 0, text)
 
     @staticmethod
     def analyze(start, end):

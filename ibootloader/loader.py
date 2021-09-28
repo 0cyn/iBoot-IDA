@@ -4,6 +4,7 @@ from disassembler_api.ida import IDAAPI
 
 from .securerom import SecureROMLoader
 from .iboot import IBootLoader
+from .iboot_encrypted import IBootEncryptedLoader
 
 def load_file(da_type, fd, neflags, format):
 
@@ -13,22 +14,31 @@ def load_file(da_type, fd, neflags, format):
         api = IDAAPI
     print(f'[+] Loaded disassembler module \'{api.api_name()}\'')
 
-    fd.seek(0x0)
-    bn = fd.read(0x4)
-    fd.seek(0x200)
-    ver_bin = fd.read(0x30)
-
-    bitness = Bitness.Bitness32 if b'\xea' in bn else Bitness.Bitness64
-    ver_str = ver_bin.decode()
-    ver_str = "%s" % (ver_str)
-    if ver_str[:9] == "SecureROM":
+    # check if im4p
+    IM4P_MAGIC = b'\x4D\x34\x50\x16'
+    fd.seek(0x8)
+    mag = fd.read(0x4)
+    if mag == IM4P_MAGIC:
         if da_type == DisassemblerType.IDA:
-            loader = SecureROMLoader(api, fd, bitness, ver_str)
+            loader = IBootEncryptedLoader(api, fd, 0, "")
+            loader.load()
+    else:
+        fd.seek(0x0)
+        bn = fd.read(0x4)
+        fd.seek(0x200)
+        ver_bin = fd.read(0x30)
 
-    if ver_str[:5] == "iBoot":
-        if da_type == DisassemblerType.IDA:
-            loader = IBootLoader(api, fd, bitness, ver_str)
+        bitness = Bitness.Bitness32 if b'\xea' in bn else Bitness.Bitness64
+        ver_str = ver_bin.decode()
+        ver_str = "%s" % (ver_str)
+        if ver_str[:9] == "SecureROM":
+            if da_type == DisassemblerType.IDA:
+                loader = SecureROMLoader(api, fd, bitness, ver_str)
 
-    print(f'[+] Using loader module \'{loader.name}\'')
+        if ver_str[:5] == "iBoot":
+            if da_type == DisassemblerType.IDA:
+                loader = IBootLoader(api, fd, bitness, ver_str)
 
-    loader.load()
+        print(f'[+] Using loader module \'{loader.name}\'')
+
+        loader.load()
