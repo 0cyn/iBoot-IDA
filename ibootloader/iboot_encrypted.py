@@ -6,12 +6,15 @@ from .structs import StructLoader
 from .maps import symbols
 from kimg4.img4 import get_keybags, aes_decrypt
 
+from .cache import Cache
+
 
 class IBootEncryptedLoader:
     def __init__(self, api: API, fd, bitness, version_string):
         self.name = "iBoot Encrypted Loader"
         self.api: API = api
         self.file: DisassemblerFile = self.api.get_disasm_file(fd)
+        self.cache = Cache()
 
         self.deleteme = []
 
@@ -23,29 +26,55 @@ class IBootEncryptedLoader:
         self.ram_segment: Segment = None
         self.string_start = 0
 
-
     def decrypt(self):
         # jesus christ, ok
-        # first, create our decrypted file.
-        idafd = self.file.fd
-        idafd.seek(0)
-        idafd_size = idafd.size()
-        im4p_bytes = idafd.read(idafd_size)
         temp_filename = '.temp_' + ''.join(random.choice(string.ascii_lowercase) for i in range(10))
         temp_filename_dec = '.temp_' + ''.join(random.choice(string.ascii_lowercase) for i in range(10))
+
+        # grab the ida file pointer
+        idafd = self.file.fd
+        # make sure we're at 0
+        idafd.seek(0)
+
+        idafd_size = idafd.size()
+        # load the entirety of file contents into a variable
+        im4p_bytes = idafd.read(idafd_size)
+
+        # write the bytes to a file so the img4 code can load it
         with open(temp_filename, 'wb') as temp_undec:
             temp_undec.write(im4p_bytes)
+        bags = None
+        # now send the file pointer for that to the img4 code; get our keybags
         with open(temp_filename, 'rb') as fp:
             bags = get_keybags(fp)
             print('keybags:')
             for bag in bags:
                 print('  ' + bag)
-        iv = self.api.ask_str('AES IV')
-        key = self.api.ask_str('AES KEY')
+
+        keybag = bags[0]
+
+        iv = ''
+        key = ''
+
+        if self.cache.is_keybag_in_cache(keybag):
+            print('[+] Found keybag in cache')
+            keybag_dict = self.cache.keybag_from_cache(keybag)
+            iv = keybag_dict['iv']
+            key = keybag_dict['key']
+        else:
+            print('[*] Keybag not yet in cache, enter IV/Key')
+            iv = self.api.ask_str('AES IV')
+            key = self.api.ask_str('AES KEY')
+            print('[*] Saving keybag to cache')
+            self.cache.cache_keybag(keybag, iv, key)
+
+        # load in the im4p dumped from ida we wrote earlier
         with open(temp_filename, 'rb') as fp:
             with open(temp_filename_dec, 'wb') as out_fp:
+                # invoke the aes code and decrypt the dumped fp, then save that to the next file
                 aes_decrypt(fp, key, iv, out_fp)
 
+        # read some basic values from the saved, decrypted fp
         with open(temp_filename_dec, 'rb') as in_fp:
             in_fp.seek(0x0)
             bn = in_fp.read(0x4)
@@ -58,12 +87,15 @@ class IBootEncryptedLoader:
             self.bitness = bitness
             self.version_string = version_string
 
+        # we can just overwrite the file pointer with our own
+        # ida bitches about this but it works
         idafd.close()
         idafd.open(temp_filename_dec)
+
+        # add the temp files to the deletion queue
+        # we cant delete these just yet, IDA needs to read the mem to load it into the program
         self.deleteme.append(temp_filename)
         self.deleteme.append(temp_filename_dec)
-
-        return
 
     def load(self):
         self.decrypt()

@@ -1,5 +1,5 @@
 
-from ibootloader import loader
+from ibootloader import loader, cache
 from disassembler_api.api import DisassemblerType
 import sys
 
@@ -42,6 +42,7 @@ def accept_file(fd, fname):
         ver_str = ""
 
         bitness = 'AArch32' if b'\xea' in bn else 'AArch64'
+        cache.Cache().update_latest_filename(fname)
 
         try:
             ver_str = ver_bin.decode()
