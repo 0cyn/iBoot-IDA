@@ -1,7 +1,17 @@
-"""
-A lot of this abstraction is to just make things more clear
-IDA's API sucks and has zero docstrings or variable names to make things easier :p
-"""
+#
+#  iBootLoader | disassembler_api
+#  ida.py
+#
+#  This file implements the abstract base classes of the API for IDA Pro 7.5
+#
+#  This file is part of iBootLoader. iBootLoader is free software that
+#  is made available under the MIT license. Consult the
+#  file "LICENSE" that is distributed together with this file
+#  for the exact licensing terms.
+#
+#  Copyright (c) kat 2021.
+#
+
 import ida_kernwin
 import idautils
 

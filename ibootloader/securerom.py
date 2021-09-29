@@ -1,3 +1,16 @@
+#
+#  iBootLoader | ibootloader
+#  securerom.py
+#
+#  Loader for SecureROM dumps
+#
+#  This file is part of iBootLoader. iBootLoader is free software that
+#  is made available under the MIT license. Consult the
+#  file "LICENSE" that is distributed together with this file
+#  for the exact licensing terms.
+#
+#  Copyright (c) kat 2021.
+#
 
 from disassembler_api.api import API, DisassemblerFile, Segment, Bitness, ProcessorType, SegmentType, SearchDirection
 from .structs import StructLoader

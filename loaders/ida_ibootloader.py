@@ -1,3 +1,16 @@
+#
+#  iBootLoader | loaders
+#  ida_ibootloader.py
+#
+#  This is the loader script for IDA Pro 7.5
+#
+#  This file is part of iBootLoader. iBootLoader is free software that
+#  is made available under the MIT license. Consult the
+#  file "LICENSE" that is distributed together with this file
+#  for the exact licensing terms.
+#
+#  Copyright (c) kat 2021.
+#
 
 from ibootloader import loader, cache
 from disassembler_api.api import DisassemblerType

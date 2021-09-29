@@ -1,3 +1,17 @@
+#
+#  iBootLoader | disassembler_api
+#  api.py
+#
+#  This specifies basic API abstract classes to be implemented for the specific disassembler APIs
+#
+#  This file is part of iBootLoader. iBootLoader is free software that
+#  is made available under the MIT license. Consult the
+#  file "LICENSE" that is distributed together with this file
+#  for the exact licensing terms.
+#
+#  Copyright (c) kat 2021.
+#
+
 from enum import Enum, IntEnum
 from abc import ABC, abstractmethod, abstractstaticmethod, abstractproperty
 

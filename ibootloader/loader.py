@@ -1,3 +1,19 @@
+#
+#  iBootLoader | ibootloader
+#  loader.py
+#
+#  Base loader invoked by the respective disassembler's "Loader" script
+#
+#  This exists to abstract out everything possible to reduce the amount of changes
+#  neeed to be made to the scripts in ./loaders specifically.
+#
+#  This file is part of iBootLoader. iBootLoader is free software that
+#  is made available under the MIT license. Consult the
+#  file "LICENSE" that is distributed together with this file
+#  for the exact licensing terms.
+#
+#  Copyright (c) kat 2021.
+#
 
 from disassembler_api.api import Bitness, DisassemblerType
 from disassembler_api.ida import IDAAPI
