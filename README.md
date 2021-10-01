@@ -3,7 +3,7 @@
 ### Installation
 
 ```
-pip3 install ilstrap
+pip3 install --upgrade ilstrap
 
 # On windows, run this in an administrator command prompt
 python3 -m ilstrap.installer --gh KritantaDev/iBootLoader
