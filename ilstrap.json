@@ -1,0 +1,5 @@
+{
+  "name": "iBootLoader",
+  "packages": "src",
+  "loader": "ida_ibootloader.py"
+}
