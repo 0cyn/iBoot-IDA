@@ -1,6 +1,11 @@
 # ibootloader
 
-WIP Loader for Apple's SecureROM/iBoot
+### Installation
+
+```
+pip3 install ilstrap
+python3 -m ilstrap.installer --gh KritantaDev/iBootLoader
+```
 
 ---
 
@@ -8,9 +13,7 @@ WIP Loader for Apple's SecureROM/iBoot
 
 | Disassembler | Supported |
 |--------------|-----------|
-| IDA 7.0-7.5  | ✓         |
-| Ghidra       | ✗         |
-| Hopper       | ✗         |
+| IDA 7.0-7.6  | ✓         |
 
 # Filetype Support 
 
