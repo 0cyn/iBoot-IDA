@@ -22,8 +22,6 @@ python3 -m ilstrap.installer --gh cxnder/iBootLoader
 
 ### Manual Installation
 
-(if you dont want to use/dont trust [source is at https://github.com/cxnder/ilstrap] my lil installer framework, perfectly understandable)
-
 Steps:
 
 1. cd into your IDA directory (where ida64/ida64.exe is located)
