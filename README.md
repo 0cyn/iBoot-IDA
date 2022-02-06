@@ -17,7 +17,7 @@
 
 ```
 python3 -m pip install --upgrade ilstrap
-python3 -m ilstrap.installer --gh cxnder/iBootLoader
+python3 -m ilstrap.installer --gh hack-different/iBoot-IDA
 ```
 
 ### Manual Installation
