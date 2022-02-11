@@ -54,7 +54,7 @@ class SecureROMLoader:
         srom_emulator.start()
         srom_emulator.resolve()
         for symbol, loc in srom_emulator.symbols.items():
-            print(f'  [+] {symbol} = {loc}')
+            print(f'  [+] {symbol} = {hex(loc)}')
             self.api.add_name(loc, symbol)
 
         print("[*] Loading custom struct types")
