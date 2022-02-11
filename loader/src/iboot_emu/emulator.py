@@ -16,8 +16,12 @@ class iEmulator:
         self.stack_base = 0
         self.stack_size = 0
         self.fp.seek(0)
-        print(self.fp.read(0x4))
-        self.data = bytearray(self.fp.read(rom_size))
+        bytess = b''
+        for i in range(rom_size // 0x20):
+            self.fp.seek(i*0x20)
+            bits = self.fp.read(0x20)
+            bytess += bits 
+        self.data = bytearray(bytess)
         self.bytes = bytes(self.data)
 
         self.skip_addrs = []
