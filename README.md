@@ -16,7 +16,7 @@
 ## Installation
 
 ```
-python3 -m pip install --upgrade ilstrap
+python3 -m pip install --upgrade ilstrap unicorn
 python3 -m ilstrap.installer --gh hack-different/iBoot-IDA
 ```
 
@@ -24,9 +24,10 @@ python3 -m ilstrap.installer --gh hack-different/iBoot-IDA
 
 Steps:
 
+0. Install unicorn using the same python installation your IDA install uses.
 1. cd into your IDA directory (where ida64/ida64.exe is located)
 2. Copy `ida_ibootloader.py` into `loaders/`
-3. Copy the four folders located in `src/` to `loaders/`
+3. Copy the five folders located in `src/` to `loaders/`
 
 ---
 

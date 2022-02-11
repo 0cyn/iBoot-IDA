@@ -13,6 +13,7 @@
 #
 
 from disassembler_api.api import API, DisassemblerFile, Segment, Bitness, ProcessorType, SegmentType, SearchDirection
+from iboot_emu.securerom import SecureROM_ARM64
 from .structs import StructLoader
 from .maps import symbols
 
@@ -21,9 +22,12 @@ class SecureROMLoader:
     def __init__(self, api: API, fd, bitness, version_string):
         self.name = "SecureROM Loader"
         self.api: API = api
+        self.fd = fd
         self.file: DisassemblerFile = self.api.get_disasm_file(fd)
         self.bitness = bitness
         self.version_string = version_string
+
+        self.bad_addr = self.api.bad_address()
 
         self.segments = []
         self.code_segment: Segment = None
@@ -34,7 +38,7 @@ class SecureROMLoader:
         self.configure_segments()
 
         print("[*] Defining entry point")
-        self.api.add_entry_point(self.code_segment.start, "start")
+        self.api.add_entry_point(self.code_segment.start, "_platform_start")
 
         print("[*] Analyzing loaded code")
         self.api.analyze(self.code_segment.start, self.code_segment.end)
@@ -42,28 +46,19 @@ class SecureROMLoader:
         print("[*] Finding string start")
         self.string_start = self.find_probable_string_start("6E 6F 72 30 00", self.code_segment)
 
-        print("[*] Pass one")
-        print("[*] Looking for function defs")
+        print("[*] Looking for function xrefs to strings")
         self.find_stringref_funcs()
 
-        if self.bitness != Bitness.Bitness32:
-            print("[*] Looking for function from call graph")
-            self.find_xrefs_from_start()
-
-        self.check_symbol_map()
+        print("[*] Launching Emulator")
+        srom_emulator = SecureROM_ARM64(self.fd)
+        srom_emulator.start()
+        srom_emulator.resolve()
+        for symbol, loc in srom_emulator.symbols.items():
+            print(f'  [+] {symbol} = {loc}')
+            self.api.add_name(loc, symbol)
 
         print("[*] Loading custom struct types")
         StructLoader(self.api)
-
-    def check_symbol_map(self):
-        soc_name = self.version_string.split(',', 1)[0].split(' ')[-1]
-        if soc_name in symbols['srom']:
-            apply_symbols = self.api.ask(f'Symbols found from {symbols["srom"][soc_name]["credit"]}. Apply these symbols?')
-            if apply_symbols:
-                print("[*] Applying symbols...")
-                for symbol in symbols["srom"][soc_name]["symbols"]:
-                    print(f'  [+] {symbols["srom"][soc_name]["symbols"][symbol]} = {hex(symbol)}')
-                    self.api.add_name(symbol, symbols["srom"][soc_name]["symbols"][symbol])
 
     def find_xrefs_from_start(self):
         for function_ea in self.api.function_addresses():
@@ -78,12 +73,12 @@ class SecureROMLoader:
 
     def find_stringref_funcs(self):
 
-        panic_location = self.find_faddr_by_strref("double panic in ", self.string_start)
+        panic_location = self.find_faddr_by_strref("double panic in ", self.string_start)[-1].start_ea
         if not panic_location == self.api.bad_address():
             print(f'  [+] _panic = {hex(panic_location)}')
             self.api.add_name(panic_location, '_panic')
 
-        task_location = self.find_faddr_by_strref("idle task", self.string_start)
+        task_location = self.find_faddr_by_strref("idle task", self.string_start)[-1].start_ea
         if not task_location == self.api.bad_address():
             print(f'  [+] _sys_setup_default_environment = {hex(task_location)}')
             self.api.add_name(task_location, '_sys_setup_default_environment')
@@ -123,11 +118,15 @@ class SecureROMLoader:
         return string_addr
 
     def find_faddr_by_strref(self, string, start_address):
+        # TODO: this function has hard coding for IDA stuff.
+
         function_address = self.api.bad_address()
         pk_ea = self.api.search_text(string, start_address, 0, SearchDirection.DOWN)
 
+        functions = []
+
         if pk_ea == self.api.bad_address():
-            return pk_ea
+            return []
 
         if pk_ea < start_address:  # String is in func
             function_address = self.api.get_function(pk_ea)
@@ -139,9 +138,10 @@ class SecureROMLoader:
                 continue
             if not func:
                 continue
+            functions.append(func)
             function_address = func.start_ea
 
         if pk_ea == self.api.bad_address():
-            return pk_ea
+            return []
 
-        return function_address
+        return functions
