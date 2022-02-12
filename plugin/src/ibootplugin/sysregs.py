@@ -7,6 +7,8 @@ Based on https://gist.github.com/bazad/42054285391c6e0dcd0ede4b5f969ad2 by Brand
 Based on https://gist.github.com/dougallj/7a75a3be1ec69ca550e7c36dc75e0d6f by Dougall J
 '''
 
+import idaapi
+import ida_hexrays
 import os
 import json
 
