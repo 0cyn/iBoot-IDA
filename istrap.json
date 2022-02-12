@@ -1,6 +1,6 @@
 {
   "name": "iBootLoader",
-  "version": "0.2.0",
+  "version": "0.2.1",
 
   "loader-modules": "loader/src",
   "loader": "loader/ida_ibootloader.py",
