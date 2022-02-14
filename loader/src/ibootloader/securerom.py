@@ -47,15 +47,22 @@ class SecureROMLoader:
         self.string_start = self.find_probable_string_start("6E 6F 72 30 00", self.code_segment)
 
         print("[*] Looking for function xrefs to strings")
-        self.find_stringref_funcs()
+        try:
+            self.find_stringref_funcs()
+        except IndexError:
+            print("[-] Failed")
+            pass
 
         print("[*] Launching Emulator")
-        srom_emulator = SecureROM_ARM64(self.fd)
-        srom_emulator.start()
-        srom_emulator.resolve()
-        for symbol, loc in srom_emulator.symbols.items():
-            print(f'  [+] {symbol} = {hex(loc)}')
-            self.api.add_name(loc, symbol)
+        try:
+            srom_emulator = SecureROM_ARM64(self.fd)
+            srom_emulator.start()
+            srom_emulator.resolve()
+            for symbol, loc in srom_emulator.symbols.items():
+                print(f'  [+] {symbol} = {hex(loc)}')
+                self.api.add_name(loc, symbol)
+        except Exception as ex:
+            print(f'[-] Emulation failed.')
 
         print("[*] Loading custom struct types")
         StructLoader(self.api)

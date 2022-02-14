@@ -71,6 +71,15 @@ def accept_file(fd, fname):
 
             return ret
 
+        if ver_str[:9] == "AVPBooter":
+            ret = {
+                "format": f'iBootLoader: VMApple SecureROM ({bitness})',
+                "processor": "arm"
+            }
+            flag = 1
+
+            return ret
+
         fd.seek(0x280)
         ver_bin = fd.read(0x20)
 

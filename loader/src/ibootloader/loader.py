@@ -26,8 +26,10 @@ def load_file(da_type, fd, neflags, format):
 
     print("[x] iBootLoader by kat")
     print("[x] initializing")
+
     if da_type == DisassemblerType.IDA:
         api = IDAAPI
+
     print(f'[+] Loaded disassembler module \'{api.api_name()}\'')
 
     # check if im4p
@@ -47,7 +49,7 @@ def load_file(da_type, fd, neflags, format):
         bitness = Bitness.Bitness32 if b'\xea' in bn else Bitness.Bitness64
         ver_str = ver_bin.decode()
         ver_str = "%s" % (ver_str)
-        if ver_str[:9] == "SecureROM":
+        if ver_str[:9] == "SecureROM" or ver_str[:9] == "AVPBooter":
             if da_type == DisassemblerType.IDA:
                 loader = SecureROMLoader(api, fd, bitness, ver_str)
 

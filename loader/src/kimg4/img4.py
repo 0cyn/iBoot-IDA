@@ -18,6 +18,7 @@ import random
 import pyaes
 import string
 
+
 def asn1_serialize(input_stream, parent=None):
     """
     This is a serializer for the output of python-asn1.

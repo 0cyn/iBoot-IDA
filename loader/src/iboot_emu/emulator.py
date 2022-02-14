@@ -3,6 +3,7 @@ from typing import Union
 from unicorn import *
 from unicorn.arm64_const import *
 
+
 class iEmulator:
 
     def __init__(self, fp, rom_size):
