@@ -19,10 +19,7 @@ from .api import Bitness, ProcessorType, API, DisassemblerFile, Segment, SearchD
 
 import ida_auto
 import ida_segment
-import ida_struct
 import ida_entry
-import idc_bc695
-import ida_funcs
 import ida_name
 import ida_search
 import idaapi
