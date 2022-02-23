@@ -2,6 +2,8 @@
 
 Contributions are always welcome! 
 
+Cleanroom contributions only please.
+
 You're free to hop right in if you have some features or fixes you want to implement; don't sweat about code guidelines too much. 
 
 This document is mainly here to outline the basic layout and architecture of this project, to make your life easier.
