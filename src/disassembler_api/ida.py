@@ -12,18 +12,17 @@
 #  Copyright (c) kat 2021.
 #
 
-import ida_kernwin
-import idautils
-
-from .api import Bitness, ProcessorType, API, DisassemblerFile, Segment, SearchDirection
-
 import ida_auto
-import ida_segment
 import ida_entry
+import ida_kernwin
 import ida_name
 import ida_search
+import ida_segment
 import idaapi
+import idautils
 import idc
+
+from .api import Bitness, ProcessorType, API, DisassemblerFile, Segment, SearchDirection
 
 
 class IDAAPI(API):
@@ -107,7 +106,7 @@ class IDAAPI(API):
     def add_struct(struct):
         struct_id = idc.add_struc(0, struct.name, 0)
         for field in struct.fields:
-           idc.add_struc_member(struct_id, field.name, -1, field.ftype, -1, field.nbytes)
+            idc.add_struc_member(struct_id, field.name, -1, field.ftype, -1, field.nbytes)
 
     @staticmethod
     def add_entry(location, name, code=True, flags=0):
@@ -157,4 +156,3 @@ class IDAFile(DisassemblerFile):
         ptr = self.fd.read(ptr_size)
         self.fd.seek(0)
         return int.from_bytes(ptr, "little")
-

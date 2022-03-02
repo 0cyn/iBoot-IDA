@@ -12,8 +12,8 @@
 #  Copyright (c) kat 2021.
 #
 
+from abc import ABC, abstractmethod
 from enum import Enum, IntEnum
-from abc import ABC, abstractmethod, abstractstaticmethod, abstractproperty
 
 
 class Bitness(IntEnum):

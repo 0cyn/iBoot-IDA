@@ -17,13 +17,12 @@
 
 from disassembler_api.api import Bitness, DisassemblerType
 from disassembler_api.ida import IDAAPI
-
-from .securerom import SecureROMLoader
 from .iboot import IBootLoader
 from .iboot_encrypted import IBootEncryptedLoader
+from .securerom import SecureROMLoader
+
 
 def load_file(da_type, fd, neflags, format):
-
     print("[x] iBootLoader by kat")
     print("[x] initializing")
 

@@ -1,5 +1,3 @@
-from typing import Union
-
 from unicorn import *
 from unicorn.arm64_const import *
 
@@ -10,7 +8,7 @@ class iEmulator:
         self.fp = fp
 
         self.emu: Uc = Uc(UC_ARCH_ARM64, UC_MODE_ARM)  # pylance bitches if this isn't set. 
-                                                       # it will get re-set by every emulator superclassing this.
+        # it will get re-set by every emulator superclassing this.
 
         self.rom_base = 0
         self.rom_size = 0
@@ -19,27 +17,27 @@ class iEmulator:
         self.fp.seek(0)
         bytess = b''
         for i in range(rom_size // 0x20):
-            self.fp.seek(i*0x20)
+            self.fp.seek(i * 0x20)
             bits = self.fp.read(0x20)
-            bytess += bits 
+            bytess += bits
         self.data = bytearray(bytess)
         self.bytes = bytes(self.data)
 
         self.skip_addrs = []
-        
+
         self.emulator_hook_stop_point = 0x0
 
     def emulator_hook_all(self, uc, address, size, user_data):
         pass
 
-    def emu_skip(self, address, instruction_size = 0x4):
+    def emu_skip(self, address, instruction_size=0x4):
         if self.emu:
             # TODO: maybe a better way to do this?
             #           couldn't find it in unicorn docs but didn't really look that hard.
             self.emu.reg_write(UC_ARM64_REG_PC, address + instruction_size)
-    
+
     def read(self, location, size):
-        return bytes(self.data[location:location+size])
+        return bytes(self.data[location:location + size])
 
     def read_int(self, location, size):
         return int.from_bytes(self.read(location, size), "little")

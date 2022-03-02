@@ -12,10 +12,12 @@
 #  Copyright (c) kat 2021.
 #
 
-from ibootloader import loader, cache
-from disassembler_api.api import DisassemblerType
 import sys
+
 import idaapi
+
+from disassembler_api.api import DisassemblerType
+from ibootloader import loader, cache
 
 DEBUG_WITHIN_IDA = 0
 

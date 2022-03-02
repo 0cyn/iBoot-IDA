@@ -88,7 +88,7 @@ class IBootLoader:
         elif self.bitness == Bitness.Bitness64:
             self.api.set_processor_type(ProcessorType.ARM64)
 
-        sram_start_ptr = 0x300 + (7*ptr_size)
+        sram_start_ptr = 0x300 + (7 * ptr_size)
 
         self.code_segment = Segment("iBoot", base_addr, self.file.size, SegmentType.CODE, self.bitness)
         self.api.create_segment(self.code_segment)
@@ -111,12 +111,12 @@ class IBootLoader:
         if len([i for i in self.api.xrefs_to(pk_ea)]) == 0:
             print(f'  [-] no xrefs to {hex(pk_ea)} found')
 
-        #print([i for i in self.api.xrefs_to(pk_ea)])
+        # print([i for i in self.api.xrefs_to(pk_ea)])
 
         for xref in self.api.xrefs_to(pk_ea):
             func = self.api.get_function(xref.frm)
             if not func:
-                #print(f'Bad Function {hex(xref.frm)}')
+                # print(f'Bad Function {hex(xref.frm)}')
                 continue
             function_address = func.start_ea
             if function_address == self.api.bad_address():
@@ -124,4 +124,3 @@ class IBootLoader:
             break
 
         return function_address
-

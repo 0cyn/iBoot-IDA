@@ -102,7 +102,7 @@ class SecureROMLoader:
             self.api.set_processor_type(ProcessorType.ARM64)
             base_addr = 0x100000000
 
-        sram_start_ptr = 0x300 + (7*ptr_size)
+        sram_start_ptr = 0x300 + (7 * ptr_size)
 
         self.code_segment = Segment("SecureROM", base_addr, self.file.size, SegmentType.CODE, self.bitness)
         self.api.create_segment(self.code_segment)

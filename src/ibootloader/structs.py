@@ -19,7 +19,6 @@ from disassembler_api.api import API, Struct, Field
 
 class StructLoader:
     def __init__(self, api: API):
-
         struct = Struct("syscfg_wpcl", [])
         struct.fields.append(Field('version', idaapi.FF_DWORD, 4))
         struct.fields.append(Field('red', idaapi.FF_DWORD, 4))

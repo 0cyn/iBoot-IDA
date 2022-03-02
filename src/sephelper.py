@@ -1,7 +1,7 @@
 import enum
 
-import idc
 import idaapi
+import idc
 
 IDA_REJECT_FILE = 0
 

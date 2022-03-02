@@ -13,10 +13,11 @@
 #
 
 import os
-import kimg4.asn1 as asn1
 import random
-import pyaes
 import string
+
+import kimg4.asn1 as asn1
+import pyaes
 
 
 def asn1_serialize(input_stream, parent=None):

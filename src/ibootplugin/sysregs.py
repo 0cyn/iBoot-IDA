@@ -7,10 +7,10 @@ Based on https://gist.github.com/bazad/42054285391c6e0dcd0ede4b5f969ad2 by Brand
 Based on https://gist.github.com/dougallj/7a75a3be1ec69ca550e7c36dc75e0d6f by Dougall J
 '''
 
-import idaapi
-import ida_hexrays
-import os
 import json
+
+import ida_hexrays
+import idaapi
 
 from .sysregs_dat import *
 
@@ -20,11 +20,11 @@ ITYPE_SYS = ITYPE_MSR + 1
 
 # AArch64 PSTATE accesses (op0 = 0b00, CRn = 0b0100).
 PSTATE_ACCESS = {
-    0b011 : 'UAO',
-    0b100 : 'PAN',
-    0b101 : 'SPSel',
-    0b110 : 'DAIFSet',
-    0b111 : 'DAIFClr',
+    0b011: 'UAO',
+    0b100: 'PAN',
+    0b101: 'SPSel',
+    0b110: 'DAIFSet',
+    0b111: 'DAIFClr',
 }
 
 
@@ -35,9 +35,10 @@ def pstate_insn(op2):
     else:
         return ('#{:b}'.format(op2))
 
+
 def sysreg_insn(op0, op1, CRn, CRm, op2):
     sr = 'S{}_{}_c{}_c{}_{}'.format(op0, op1, CRn, CRm, op2)
-    #print(sr)
+    # print(sr)
     reg = SYSTEM_REGISTERS.get(sr)
     if reg:
         name = reg[0]
@@ -46,15 +47,16 @@ def sysreg_insn(op0, op1, CRn, CRm, op2):
     else:
         return sr
 
+
 def process_msr(insn):
-    assert(insn & 0xFFC00000 == 0xD5000000)
-    L   = (insn >> 21) &  0x1
-    op0 = (insn >> 19) &  0x3
-    op1 = (insn >> 16) &  0x7
-    CRn = (insn >> 12) &  0xf
-    CRm = (insn >>  8) &  0xf
-    op2 = (insn >>  5) &  0x7
-    Rt  = (insn >>  0) & 0x1f
+    assert (insn & 0xFFC00000 == 0xD5000000)
+    L = (insn >> 21) & 0x1
+    op0 = (insn >> 19) & 0x3
+    op1 = (insn >> 16) & 0x7
+    CRn = (insn >> 12) & 0xf
+    CRm = (insn >> 8) & 0xf
+    op2 = (insn >> 5) & 0x7
+    Rt = (insn >> 0) & 0x1f
     if L == 0b0 and op0 == 0b00 and CRn == 0b0100 and Rt == 0b11111:
         return pstate_insn(op2)
     elif op0 != 0b00:
@@ -70,11 +72,12 @@ class Aarch64SysRegHook(idaapi.IDP_Hooks):
     def ev_out_operand(self, outctx, op):
         if outctx.insn.itype in self.CUSTOM_INSTRUCTIONS:
             insn = outctx.insn
-            #print("ev_out_operand")
+            # print("ev_out_operand")
             if op.n < 2:
                 if outctx.insn.itype == idaapi.ARM_mrs:
                     if op.n == 1:
-                        outctx.out_colored_register_line(sysreg_insn(3, insn.ops[1].value, insn.ops[2].reg, insn.ops[3].reg, insn.ops[4].value))
+                        outctx.out_colored_register_line(
+                            sysreg_insn(3, insn.ops[1].value, insn.ops[2].reg, insn.ops[3].reg, insn.ops[4].value))
                     else:
                         return 0
                 elif outctx.insn.itype == idaapi.ARM_msr:
@@ -89,7 +92,9 @@ class Aarch64SysRegHook(idaapi.IDP_Hooks):
                             insn.itype = idaapi.ARM_msr
                 elif outctx.insn.itype == idaapi.ARM_sys:
                     if op.n == 0:
-                        outctx.out_colored_register_line(sysreg_insn(1, insn.ops[0].value, insn.ops[1].reg, insn.ops[2].reg, insn.ops[3].value).split()[1].strip())
+                        outctx.out_colored_register_line(
+                            sysreg_insn(1, insn.ops[0].value, insn.ops[1].reg, insn.ops[2].reg,
+                                        insn.ops[3].value).split()[1].strip())
                     else:
                         insn.itype = ITYPE_SYS
                         outctx.out_one_operand(4)
@@ -101,11 +106,14 @@ class Aarch64SysRegHook(idaapi.IDP_Hooks):
                 '''
             return 1
         return 0
+
     def ev_out_mnem(self, outctx):
         if outctx.insn.itype == idaapi.ARM_sys:
-            #print("ev_out_insn")
+            # print("ev_out_insn")
             insn = outctx.insn
-            outctx.out_custom_mnem(sysreg_insn(1, insn.ops[0].value, insn.ops[1].reg, insn.ops[2].reg, insn.ops[3].value).split()[0].strip(), self.INDENT)
+            outctx.out_custom_mnem(
+                sysreg_insn(1, insn.ops[0].value, insn.ops[1].reg, insn.ops[2].reg, insn.ops[3].value).split()[
+                    0].strip(), self.INDENT)
             return 1
         return 0
 
@@ -124,7 +132,7 @@ class Aarch64SysRegPlugin(idaapi.plugin_t):
         if not ida_hexrays.init_hexrays_plugin():
             print(("[-] {0} : no decompiler available, skipping".format(self.wanted_name)))
             return idaapi.PLUGIN_SKIP
-        print("%s init"%self.comment)
+        print("%s init" % self.comment)
 
         d = json.loads(APPLE_REGS_JSON)
 
@@ -141,7 +149,8 @@ class Aarch64SysRegPlugin(idaapi.plugin_t):
     def term(self):
         if self.hook is not None:
             self.hook.unhook()
-        print("%s unloaded"%self.comment)
+        print("%s unloaded" % self.comment)
+
 
 def PLUGIN_ENTRY():
     return Aarch64SysRegPlugin()
