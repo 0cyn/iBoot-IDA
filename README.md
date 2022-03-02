@@ -2,7 +2,7 @@
 
 32/64 bit SecureROM/iBoot loader for IDA Pro. Supports IDA Pro 7.0+ on all platforms.
 
-### Filetype Support 
+### Filetype Support
 
 | File type                | Supported |
 |--------------------------|-----------|
@@ -37,7 +37,8 @@ Steps:
 
 Maintainer: https://github.com/cxnder
 
-AArch Sysregs plugin based on  https://github.com/TrungNguyen1909/aarch64-sysreg-ida (based on a plugin by bazad, based on a script by someone else, based on ...)
+AArch Sysregs plugin based on  https://github.com/TrungNguyen1909/aarch64-sysreg-ida (based on a plugin by bazad, based
+on a script by someone else, based on ...)
 
 this project was originally inspired by https://github.com/argp/iBoot64helper
 

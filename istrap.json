@@ -1,10 +1,14 @@
 {
   "name": "iBootLoader",
-  "version": "0.2.1",
-
-  "loader-modules": "loader/src",
-  "loader": "loader/ida_ibootloader.py",
-
-  "plugin-modules": "plugin/src",
-  "plugin": "plugin/ida_ibootplugin.py"
+  "version": "0.3.0",
+  "load_paths": [
+    "src"
+  ],
+  "loaders": [
+    "src/ida_ibootloader.py",
+    "src/sephelper.py"
+  ],
+  "plugins": [
+    "src/ida_ibootplugin.py"
+  ]
 }
