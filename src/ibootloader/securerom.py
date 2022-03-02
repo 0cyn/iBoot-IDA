@@ -15,7 +15,6 @@
 from disassembler_api.api import API, DisassemblerFile, Segment, Bitness, ProcessorType, SegmentType, SearchDirection
 from iboot_emu.securerom import SecureROM_ARM64
 from .structs import StructLoader
-from .maps import symbols
 
 
 class SecureROMLoader:

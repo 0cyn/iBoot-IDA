@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# This is a pure-Python implementation of the AES algorithm and AES common
+# This is a pure-Python implementation of the AES algorithm and AES tools
 # modes of operation.
 
 # See: https://en.wikipedia.org/wiki/Advanced_Encryption_Standard

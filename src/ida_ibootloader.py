@@ -15,6 +15,7 @@
 from ibootloader import loader, cache
 from disassembler_api.api import DisassemblerType
 import sys
+import idaapi
 
 DEBUG_WITHIN_IDA = 0
 
@@ -122,9 +123,29 @@ def accept_file(fd, fname):
     return ret
 
 
-def load_file(fd, neflags, format):
-    loader.load_file(DisassemblerType.IDA, fd, neflags, format)
+def load_file(file_descriptor, neflags, format):
+    loader.load_file(DisassemblerType.IDA, file_descriptor, neflags, format)
 
     return 1
 
-# EOF
+
+# noinspection PyPep8Naming
+def PLUGIN_ENTRY():
+    class iBootLoaderPlugin(idaapi.plugin_t):
+        flags = idaapi.PLUGIN_PROC | idaapi.PLUGIN_HIDE
+        comment = "Aarch64 Apple SecureROM loader plugin"
+        help = "Runs transparently"
+        wanted_name = "Aarch64 SecureROM Loader"
+        wanted_hotkey = str()
+        hook = None
+
+        def init(self):
+            pass
+
+        def run(self, arg):
+            pass
+
+        def term(self):
+            pass
+
+    return iBootLoaderPlugin()

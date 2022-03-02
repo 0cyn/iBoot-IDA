@@ -109,14 +109,14 @@ class Aarch64SysRegHook(idaapi.IDP_Hooks):
             return 1
         return 0
 
+
 class Aarch64SysRegPlugin(idaapi.plugin_t):
     flags = idaapi.PLUGIN_PROC | idaapi.PLUGIN_HIDE
     comment = "Aarch64 Apple SysReg extension"
-    wanted_hotkey = ""
     help = "Runs transparently"
     wanted_name = "Aarch64 SysReg"
+    wanted_hotkey = str()
     hook = None
-    enabled = 1
 
     def init(self):
         if idaapi.ph_get_id() != idaapi.PLFM_ARM or idaapi.BADADDR <= 0xFFFFFFFF:
@@ -135,7 +135,7 @@ class Aarch64SysRegPlugin(idaapi.plugin_t):
         self.hook.hook()
         return idaapi.PLUGIN_KEEP
 
-    def run():
+    def run(self, cmd):
         pass
 
     def term(self):
